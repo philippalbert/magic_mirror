@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic Mirror</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="mirror">
+        <div id="reflection">
+            <p>Touch the mirror to interact...</p>
+        </div>
+    </div>
+    <div id="modal" class="hidden">
+        <div id="modal-content">
+            <div id="thinking">
+                <p>LLM is thinking<span id="dots"></span></p>
+            </div>
+            <div id="answer" class="hidden">
+                <p id="response-text"></p>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
