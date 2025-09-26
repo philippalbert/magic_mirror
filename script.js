@@ -1,9 +1,8 @@
 let isActivated = false;
-let fullTranscript = '';
 
 const welcomeEl = document.getElementById('welcome');
 const transcriptEl = document.getElementById('transcript');
-const textEl = document.getElementById('text');
+const conversationEl = document.getElementById('conversation');
 const errorEl = document.getElementById('error');
 const startBtn = document.getElementById('startBtn');
 
@@ -17,36 +16,49 @@ if (!SpeechRecognition) {
         startBtn.style.display = 'none';
         const recognition = new SpeechRecognition();
         recognition.continuous = true;
-        recognition.interimResults = true;
+        recognition.interimResults = false; // only final
         recognition.lang = 'en-US';
 
         recognition.onresult = (event) => {
             let finalTranscript = '';
-            let interimTranscript = '';
             for (let i = event.resultIndex; i < event.results.length; i++) {
-                const transcript = event.results[i][0].transcript;
                 if (event.results[i].isFinal) {
-                    finalTranscript += transcript;
-                } else {
-                    interimTranscript += transcript;
+                    finalTranscript += event.results[i][0].transcript;
                 }
             }
             if (!isActivated && (finalTranscript.toLowerCase().includes('hello mirror') || finalTranscript.toLowerCase().includes('hello mira'))) {
                 isActivated = true;
                 welcomeEl.style.display = 'none';
                 transcriptEl.style.display = 'block';
-                fullTranscript = ''; // reset
+                conversationEl.innerHTML = '';
             }
             if (isActivated) {
                 if (finalTranscript.toLowerCase().includes('goodbye')) {
                     isActivated = false;
                     transcriptEl.style.display = 'none';
                     welcomeEl.style.display = 'block';
-                    fullTranscript = '';
-                    textEl.innerHTML = '';
+                    conversationEl.innerHTML = '';
+                } else if (finalTranscript.includes('?')) {
+                    // Send to LLM
+                    fetch('/ask', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ question: finalTranscript })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.answer) {
+                            conversationEl.innerHTML += '<p><strong>You:</strong> ' + finalTranscript + '</p><p><strong>LLM:</strong> ' + data.answer + '</p>';
+                        } else {
+                            conversationEl.innerHTML += '<p><strong>You:</strong> ' + finalTranscript + '</p><p><strong>Error:</strong> ' + data.error + '</p>';
+                        }
+                    })
+                    .catch(error => {
+                        conversationEl.innerHTML += '<p><strong>You:</strong> ' + finalTranscript + '</p><p><strong>Error:</strong> ' + error.message + '</p>';
+                    });
                 } else {
-                    fullTranscript += finalTranscript;
-                    textEl.innerHTML = fullTranscript + '<span style="color:gray;">' + interimTranscript + '</span>';
+                    // Just display speech
+                    conversationEl.innerHTML += '<p><strong>You:</strong> ' + finalTranscript + '</p>';
                 }
             }
         };
