@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const mirror = document.getElementById('mirror');
     const modal = document.getElementById('modal');
+    const listening = document.getElementById('listening');
     const thinking = document.getElementById('thinking');
     const answer = document.getElementById('answer');
     const responseText = document.getElementById('response-text');
@@ -41,7 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
         recognition.stop(); // Stop continuous listening during conversation
 
         while (true) {
-            thinking.classList.remove('hidden');
+            listening.classList.remove('hidden');
+            thinking.classList.add('hidden');
             answer.classList.add('hidden');
 
             // Get the question from speech
@@ -51,6 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 recognition.start(); // Restart continuous listening
                 return;
             }
+
+            listening.classList.add('hidden');
+            thinking.classList.remove('hidden');
 
             try {
                 const response = await fetch('/ask', {
@@ -71,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 speak(answerText);
             } catch (error) {
                 console.error('Error:', error);
+                listening.classList.add('hidden');
                 thinking.classList.add('hidden');
                 answer.classList.remove('hidden');
                 responseText.textContent = "Error contacting the mirror.";
