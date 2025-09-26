@@ -19,7 +19,7 @@ def ask():
         return jsonify({'error': 'No question provided'}), 400
     
     try:
-        result = ollama.generate(model='deepseek-r1:1.5b', prompt=question)
+        result = ollama.generate(model='tinyllama', prompt=question)
         answer = result.get('response', 'No response')
         return jsonify({'answer': answer})
     except Exception as e:
