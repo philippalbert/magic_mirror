@@ -3,6 +3,7 @@ let isActivated = false;
 const welcomeEl = document.getElementById('welcome');
 const transcriptEl = document.getElementById('transcript');
 const conversationEl = document.getElementById('conversation');
+const thinkingEl = document.getElementById('thinking');
 const errorEl = document.getElementById('error');
 const startBtn = document.getElementById('startBtn');
 
@@ -38,8 +39,10 @@ if (!SpeechRecognition) {
                     transcriptEl.style.display = 'none';
                     welcomeEl.style.display = 'block';
                     conversationEl.innerHTML = '';
-                } else if (finalTranscript.includes('?')) {
+                } else if (finalTranscript.toLowerCase().includes('ask the llm')) {
                     // Send to LLM
+                    conversationEl.innerHTML += '<p><strong>You:</strong> ' + finalTranscript + '</p>';
+                    thinkingEl.style.display = 'block';
                     fetch('/ask', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -47,14 +50,16 @@ if (!SpeechRecognition) {
                     })
                     .then(response => response.json())
                     .then(data => {
+                        thinkingEl.style.display = 'none';
                         if (data.answer) {
-                            conversationEl.innerHTML += '<p><strong>You:</strong> ' + finalTranscript + '</p><p><strong>LLM:</strong> ' + data.answer + '</p>';
+                            conversationEl.innerHTML += '<p><strong>LLM:</strong> ' + data.answer + '</p>';
                         } else {
-                            conversationEl.innerHTML += '<p><strong>You:</strong> ' + finalTranscript + '</p><p><strong>Error:</strong> ' + data.error + '</p>';
+                            conversationEl.innerHTML += '<p><strong>Error:</strong> ' + data.error + '</p>';
                         }
                     })
                     .catch(error => {
-                        conversationEl.innerHTML += '<p><strong>You:</strong> ' + finalTranscript + '</p><p><strong>Error:</strong> ' + error.message + '</p>';
+                        thinkingEl.style.display = 'none';
+                        conversationEl.innerHTML += '<p><strong>Error:</strong> ' + error.message + '</p>';
                     });
                 } else {
                     // Just display speech

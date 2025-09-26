@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magic Mirror</title>
+    <style>
+        .thinking {
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.5; }
+        }
+    </style>
 </head>
 <body>
     <h1>Magic Mirror</h1>
@@ -12,6 +21,7 @@
     <div id="transcript" style="display:none;">
         <p>Conversation:</p>
         <div id="conversation" style="font-size: 18px; border: 1px solid #ccc; padding: 10px; min-height: 100px;"></div>
+        <div id="thinking" class="thinking" style="display:none; font-size: 18px; color: blue;">LLM is thinking...</div>
     </div>
     <div id="error" style="color: red;"></div>
     <script src="script.js"></script>
