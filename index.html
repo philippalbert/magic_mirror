@@ -5,24 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magic Mirror</title>
     <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #transcript {
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 2px solid white;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+        #conversation {
+            max-height: 400px;
+            overflow-y: auto;
+        }
         .thinking {
             animation: blink 1s infinite;
+            color: cyan;
         }
         @keyframes blink {
             0%, 50% { opacity: 1; }
             51%, 100% { opacity: 0.5; }
         }
+        #error {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: red;
+        }
     </style>
 </head>
 <body>
-    <h1>Magic Mirror</h1>
-    <div id="welcome">Welcome! Say "hello mirror" or "hello mira" to start the magic.</div>
     <div id="transcript" style="display:none;">
-        <p>Conversation:</p>
-        <div id="conversation" style="font-size: 18px; border: 1px solid #ccc; padding: 10px; min-height: 100px;"></div>
-        <div id="thinking" class="thinking" style="display:none; font-size: 18px; color: blue;">LLM is thinking...</div>
+        <div id="conversation"></div>
+        <div id="thinking" class="thinking" style="display:none;">LLM is thinking...</div>
     </div>
-    <div id="error" style="color: red;"></div>
+    <div id="error"></div>
     <script src="script.js"></script>
 </body>
 </html>

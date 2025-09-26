@@ -1,6 +1,5 @@
 let isActivated = false;
 
-const welcomeEl = document.getElementById('welcome');
 const transcriptEl = document.getElementById('transcript');
 const conversationEl = document.getElementById('conversation');
 const thinkingEl = document.getElementById('thinking');
@@ -25,7 +24,6 @@ if (!SpeechRecognition) {
         }
         if (!isActivated && (finalTranscript.toLowerCase().includes('hello mirror') || finalTranscript.toLowerCase().includes('hello mira'))) {
             isActivated = true;
-            welcomeEl.style.display = 'none';
             transcriptEl.style.display = 'block';
             conversationEl.innerHTML = '';
         }
@@ -33,7 +31,6 @@ if (!SpeechRecognition) {
             if (finalTranscript.toLowerCase().includes('goodbye')) {
                 isActivated = false;
                 transcriptEl.style.display = 'none';
-                welcomeEl.style.display = 'block';
                 conversationEl.innerHTML = '';
             } else if (finalTranscript.toLowerCase().includes('ask the llm')) {
                 // Send to LLM
