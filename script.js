@@ -38,8 +38,16 @@ if (!SpeechRecognition) {
                 fullTranscript = ''; // reset
             }
             if (isActivated) {
-                fullTranscript += finalTranscript;
-                textEl.innerHTML = fullTranscript + '<span style="color:gray;">' + interimTranscript + '</span>';
+                if (finalTranscript.toLowerCase().includes('goodbye')) {
+                    isActivated = false;
+                    transcriptEl.style.display = 'none';
+                    welcomeEl.style.display = 'block';
+                    fullTranscript = '';
+                    textEl.innerHTML = '';
+                } else {
+                    fullTranscript += finalTranscript;
+                    textEl.innerHTML = fullTranscript + '<span style="color:gray;">' + interimTranscript + '</span>';
+                }
             }
         };
 
