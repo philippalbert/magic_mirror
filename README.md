@@ -1,12 +1,12 @@
 # Magic Mirror
 
-A voice-activated magic mirror application with local LLM integration, designed to work offline without internet connectivity. Features a spy-themed UI and responds to voice commands.
+A voice-activated magic mirror application with local LLM integration, designed for offline LLM operation. Features a spy-themed UI and responds to voice commands.
 
 ## Features
 
 - Voice activation with "Hello Mirror"
 - Conversational interface allowing multiple questions
-- Offline speech recognition using Web Speech API
+- Speech recognition using Web Speech API
 - Local LLM integration with DeepSeek via Ollama
 - Text-to-speech response output
 - Spy-themed dark UI with grey color scheme
@@ -16,7 +16,7 @@ A voice-activated magic mirror application with local LLM integration, designed 
 
 - Python 3.7+
 - Ollama (for local LLM)
-- Modern web browser with offline speech recognition support (Chrome recommended)
+- Modern web browser with speech recognition support (Chrome, Chromium, etc.)
 - Microphone access
 
 ## Installation
@@ -40,14 +40,6 @@ ollama pull deepseek-r1:1.5b
 ```bash
 pip install flask ollama
 ```
-
-### 4. Browser Setup (for offline speech recognition)
-
-- Use Chrome or Chromium
-- Enable offline speech recognition:
-  - Go to `chrome://settings/content/speechRecognition`
-  - Ensure "Allow sites to use offline speech recognition" is enabled
-  - Download offline language models if prompted
 
 ## Running the Application
 
@@ -84,7 +76,7 @@ Open your browser and navigate to `http://localhost:5000`
 
 ## Troubleshooting
 
-- **Speech recognition not working**: Ensure browser has offline models downloaded
+- **Speech recognition not working**: Ensure microphone permissions are granted; check internet connection for online recognition
 - **LLM not responding**: Check that Ollama is running with `ollama list`
 - **Microphone access denied**: Grant microphone permissions in browser settings
 - **Port 5000 in use**: Change the port in `app.py` if needed
@@ -94,15 +86,14 @@ Open your browser and navigate to `http://localhost:5000`
 - **Frontend**: HTML/CSS/JavaScript with Web Speech API
 - **Backend**: Flask server with Ollama integration
 - **LLM**: Local DeepSeek model via Ollama
-- **Speech**: Browser-based recognition and synthesis (offline capable)
+- **Speech**: Browser-based recognition and synthesis
 
 ## Offline Operation
 
-The entire system operates without internet:
-- Speech recognition uses downloaded browser models
+The LLM operates locally without internet, but speech recognition may require internet in some browsers (e.g., Chromium):
 - LLM runs locally via Ollama
 - Text-to-speech uses browser's built-in synthesis
-- No external API calls required
+- Speech recognition uses online services in unsupported browsers
 
 ## Customization
 

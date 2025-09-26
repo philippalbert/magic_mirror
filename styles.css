@@ -73,6 +73,14 @@ body {
     100% { opacity: 1; }
 }
 
+#question {
+    font-size: 1.2rem;
+}
+
+#question.hidden {
+    display: none;
+}
+
 #answer {
     font-size: 1.2rem;
 }

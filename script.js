@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const mirror = document.getElementById('mirror');
     const modal = document.getElementById('modal');
     const listening = document.getElementById('listening');
+    const questionDiv = document.getElementById('question');
+    const questionText = document.getElementById('question-text');
     const thinking = document.getElementById('thinking');
     const answer = document.getElementById('answer');
     const responseText = document.getElementById('response-text');
@@ -47,14 +49,21 @@ document.addEventListener('DOMContentLoaded', () => {
             answer.classList.add('hidden');
 
             // Get the question from speech
-            const question = await getQuestion();
-            if (!question || question.toLowerCase().includes('goodbye') || question.toLowerCase().includes('stop')) {
+            const userQuestion = await getQuestion();
+            if (!userQuestion || userQuestion.toLowerCase().includes('goodbye') || userQuestion.toLowerCase().includes('stop')) {
                 modal.classList.add('hidden');
                 recognition.start(); // Restart continuous listening
                 return;
             }
 
             listening.classList.add('hidden');
+            questionDiv.classList.remove('hidden');
+            questionText.textContent = userQuestion;
+
+            // Brief pause to show the question
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            questionDiv.classList.add('hidden');
             thinking.classList.remove('hidden');
 
             try {
@@ -63,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ question: question })
+                    body: JSON.stringify({ question: userQuestion })
                 });
                 const data = await response.json();
                 const answerText = data.answer || "Error getting answer";
