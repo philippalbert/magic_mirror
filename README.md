@@ -4,7 +4,8 @@ A voice-activated magic mirror application with local LLM integration, designed 
 
 ## Features
 
-- Voice activation with "Hello Mirror" or "Hey Mirror"
+- Voice activation with "Hello Mirror"
+- Conversational interface allowing multiple questions
 - Offline speech recognition using Web Speech API
 - Local LLM integration with DeepSeek via Ollama
 - Text-to-speech response output
@@ -69,9 +70,9 @@ Open your browser and navigate to `http://localhost:5000`
 ## Usage
 
 1. Allow microphone access when prompted
-2. Say "Mirror" or "Hey Mirror" to activate
-3. Ask your question when prompted
-4. The mirror will display and speak the LLM's response
+2. Say "Hello Mirror" or click the mirror to start a conversation
+3. Ask your questions; the LLM will respond to each one
+4. Say "goodbye" or "stop" to end the conversation, or click outside the modal
 
 ## Raspberry Pi Deployment
 

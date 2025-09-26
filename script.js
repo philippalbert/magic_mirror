@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         recognition.onresult = (event) => {
             const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase();
             console.log('Heard:', transcript);
-            if (transcript.includes('mirror') || transcript.includes('hey mirror')) {
+            if (transcript.includes('hello mirror')) {
                 triggerMirror();
             }
         };
@@ -38,38 +38,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function triggerMirror() {
         modal.classList.remove('hidden');
-        thinking.classList.remove('hidden');
-        answer.classList.add('hidden');
+        recognition.stop(); // Stop continuous listening during conversation
 
-        // Get the question from speech
-        const question = await getQuestion();
-        if (!question) {
-            modal.classList.add('hidden');
-            return;
-        }
+        while (true) {
+            thinking.classList.remove('hidden');
+            answer.classList.add('hidden');
 
-        try {
-            const response = await fetch('/ask', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ question: question })
-            });
-            const data = await response.json();
-            const answerText = data.answer || "Error getting answer";
+            // Get the question from speech
+            const question = await getQuestion();
+            if (!question || question.toLowerCase().includes('goodbye') || question.toLowerCase().includes('stop')) {
+                modal.classList.add('hidden');
+                recognition.start(); // Restart continuous listening
+                return;
+            }
 
-            thinking.classList.add('hidden');
-            answer.classList.remove('hidden');
-            responseText.textContent = answerText;
+            try {
+                const response = await fetch('/ask', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ question: question })
+                });
+                const data = await response.json();
+                const answerText = data.answer || "Error getting answer";
 
-            // Speak the answer
-            speak(answerText);
-        } catch (error) {
-            console.error('Error:', error);
-            thinking.classList.add('hidden');
-            answer.classList.remove('hidden');
-            responseText.textContent = "Error contacting the mirror.";
+                thinking.classList.add('hidden');
+                answer.classList.remove('hidden');
+                responseText.textContent = answerText;
+
+                // Speak the answer
+                speak(answerText);
+            } catch (error) {
+                console.error('Error:', error);
+                thinking.classList.add('hidden');
+                answer.classList.remove('hidden');
+                responseText.textContent = "Error contacting the mirror.";
+                break; // Exit on error
+            }
         }
     }
 
