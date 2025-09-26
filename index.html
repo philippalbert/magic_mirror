@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magic Mirror</title>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
-    <div id="root"></div>
-    <script type="text/babel" src="App.js"></script>
+    <h1>Magic Mirror</h1>
+    <button id="startBtn">Start Listening</button>
+    <div id="welcome">Welcome! Say "hello mirror" or "hello mira" to start the magic.</div>
+    <div id="transcript" style="display:none;">
+        <p>You said:</p>
+        <div id="text" style="font-size: 18px; border: 1px solid #ccc; padding: 10px; min-height: 100px;"></div>
+    </div>
+    <div id="error" style="color: red;"></div>
+    <script src="script.js"></script>
 </body>
 </html>
