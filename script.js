@@ -67,8 +67,21 @@ if (!SpeechRecognition) {
         }
     };
 
+    recognition.onend = () => {
+        // Restart recognition if activated
+        if (isActivated) {
+            recognition.start();
+        }
+    };
+
     recognition.onerror = (event) => {
         errorEl.textContent = 'Speech recognition error: ' + event.error;
+        // Attempt to restart after error
+        if (isActivated) {
+            setTimeout(() => {
+                recognition.start();
+            }, 1000); // Small delay to avoid rapid restarts
+        }
     };
 
     recognition.start();
