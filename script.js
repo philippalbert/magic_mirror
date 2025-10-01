@@ -55,10 +55,12 @@ if (!SpeechRecognition) {
                     } else {
                         conversationEl.innerHTML += '<p><strong>Error:</strong> ' + data.error + '</p>';
                     }
+                    conversationEl.scrollTop = conversationEl.scrollHeight;
                 })
                 .catch(error => {
                     thinkingEl.style.display = 'none';
                     conversationEl.innerHTML += '<p><strong>Error:</strong> ' + error.message + '</p>';
+                    conversationEl.scrollTop = conversationEl.scrollHeight;
                 });
             } else {
                 // Just display speech
