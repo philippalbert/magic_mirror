@@ -45,7 +45,8 @@ if (!SpeechRecognition) {
                 .then(data => {
                     thinkingEl.style.display = 'none';
                     if (data.answer) {
-                        conversationEl.innerHTML += '<p><strong>LLM:</strong> ' + data.answer + '</p>';
+                        const formattedAnswer = data.answer.replace(/\n/g, '<br>');
+                        conversationEl.innerHTML += '<div class="llm-response"><strong>LLM:</strong><br>' + formattedAnswer + '</div>';
                     } else {
                         conversationEl.innerHTML += '<p><strong>Error:</strong> ' + data.error + '</p>';
                     }
