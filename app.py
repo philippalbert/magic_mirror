@@ -20,15 +20,14 @@ def script():
 def ask():
     if not GROQ_API_KEY:
         return jsonify({'error': 'GROQ_API_KEY not configured'}), 500
-    
+
     data = request.get_json()
-    question = data.get('question', '')
-    if not question:
-        return jsonify({'error': 'No question provided'}), 400
-    
+    messages = data.get('messages', [])
+    if not messages:
+        return jsonify({'error': 'No messages provided'}), 400
+
     try:
         client = groq.Groq(api_key=GROQ_API_KEY)
-        messages = [{'role': 'user', 'content': question}]
 
         response = client.chat.completions.create(
             model="groq/compound",

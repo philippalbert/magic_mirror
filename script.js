@@ -1,4 +1,5 @@
 let isActivated = false;
+let messages = [];
 
 const transcriptEl = document.getElementById('transcript');
 const conversationEl = document.getElementById('conversation');
@@ -26,6 +27,7 @@ if (!SpeechRecognition) {
             isActivated = true;
             transcriptEl.style.display = 'block';
             conversationEl.innerHTML = '';
+            messages = [];
         }
         if (isActivated) {
             if (finalTranscript.toLowerCase().includes('goodbye')) {
@@ -36,10 +38,12 @@ if (!SpeechRecognition) {
                 // Send to LLM
                 conversationEl.innerHTML += '<p><strong>You:</strong> ' + finalTranscript + '</p>';
                 thinkingEl.style.display = 'block';
+                messages.push({role: 'user', content: finalTranscript});
+                let history = messages.slice(-6); // last 3 pairs, 6 messages
                 fetch('/ask', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ question: finalTranscript })
+                    body: JSON.stringify({ messages: history })
                 })
                 .then(response => response.json())
                 .then(data => {
@@ -47,6 +51,7 @@ if (!SpeechRecognition) {
                     if (data.answer) {
                         const formattedAnswer = data.answer.replace(/\n/g, '<br>');
                         conversationEl.innerHTML += '<div class="llm-response"><strong>LLM:</strong><br>' + formattedAnswer + '</div>';
+                        messages.push({role: 'assistant', content: data.answer});
                     } else {
                         conversationEl.innerHTML += '<p><strong>Error:</strong> ' + data.error + '</p>';
                     }
